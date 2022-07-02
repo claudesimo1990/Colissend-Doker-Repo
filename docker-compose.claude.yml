@@ -1,0 +1,58 @@
+version: '2.2'
+
+services:
+  claude_colissend_db:
+    extends:
+      file: common.yml
+      service: claude_colissend_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mariapwd
+
+  claude_colissend_php-fpm:
+    extends:
+      file: common.yml
+      service: claude_colissend_php-fpm
+    depends_on:
+      - claude_colissend_redis
+    restart: always
+    build:
+      args:
+        development: 1
+        http_proxy: http://192.168.7.240:8080
+        https_proxy: http://192.168.7.240:8080
+        phpini: php_dev_claude.ini
+    links:
+      - claude_colissend_db
+
+  claude_colissend_nginx:
+    extends:
+      file: common.yml
+      service: claude_colissend_nginx
+    restart: always
+    depends_on:
+      - claude_colissend_php-fpm
+    build:
+      args:
+        development: 1
+        nginxconf: nginx_dev_claude.conf
+        http_proxy: http://192.168.7.240:8080
+        https_proxy: http://192.168.7.240:8080
+    labels:
+      - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
+    links:
+      - claude_colissend_php-fpm
+
+  claude_colissend_redis:
+    extends:
+      file: common.yml
+      service: claude_colissend_redis
+    restart: always
+
+networks:
+  portal-net:
+    external: true
+  traefik-net:
+    external: true
+  database-net:
+    external: true
