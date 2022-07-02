@@ -1,6 +1,6 @@
 FROM nginx:1.21.1
 
-MAINTAINER Dirk Blicker <dirk.blicker@abus-kransysteme.de>
+MAINTAINER Claude Simo <claudesimo1990@gmail.com>
 
 ARG nginxconf
 

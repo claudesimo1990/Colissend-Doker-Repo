@@ -52,5 +52,7 @@ networks:
     external: true
   traefik-net:
     external: true
+  proxy:
+    external: true
   database-net:
     external: true
