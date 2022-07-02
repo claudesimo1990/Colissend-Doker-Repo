@@ -33,7 +33,7 @@ services:
     hostname: claude_colissend_nginx
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.colissend-secure.entrypoints=frontendsecure"
+      - "traefik.http.routers.colissend-secure.entrypoints=colissend"
       - "traefik.http.routers.colissend-secure.service=colissend"
       - "traefik.http.routers.colissend-secure.tls=true"
       - "traefik.http.services.colissend.loadbalancer.server.port=80"
