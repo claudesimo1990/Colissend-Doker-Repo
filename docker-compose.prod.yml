@@ -7,6 +7,7 @@ services:
       service: claude_colissend_db
     restart: always
     environment:
+      MYSQL_DATABASE: colissend
       MYSQL_ROOT_PASSWORD: mariapwd
 
   claude_colissend_php-fpm:
