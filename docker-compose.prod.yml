@@ -37,7 +37,6 @@ services:
       - /etc/ssl/abus-bkp/abus-kransysteme.de.key:/etc/nginx/ssl/abus-kransysteme.de.key
     labels:
       - "traefik.http.routers.colissend-secure.rule=Host(`colissend.com`)"
-      - "traefik.http.routers.colissend-secure.tls.certresolver=leresolver"
     links:
       - claude_colissend_php-fpm
 
@@ -51,8 +50,6 @@ networks:
   portal-net:
     external: true
   traefik-net:
-    external: true
-  proxy:
     external: true
   database-net:
     external: true
