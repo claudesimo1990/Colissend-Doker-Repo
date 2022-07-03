@@ -18,7 +18,7 @@ services:
     build: ./php-fpm
     container_name: claude_colissend_php-fpm
     hostname: claude_colissend_php-fpm
-    cpus: 1.0
+    cpus: 1.00
     volumes:
       - /srv/colissend/data/www:/var/www/html
       - /srv/colissend/logs/php-fpm:/var/log/php
