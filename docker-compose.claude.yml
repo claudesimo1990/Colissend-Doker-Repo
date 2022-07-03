@@ -39,6 +39,8 @@ services:
         http_proxy: http://192.168.7.240:8080
         https_proxy: http://192.168.7.240:8080
     labels:
+      - "traefik.http.routers.colissend-secure.entrypoints=websecure"
+      - "traefik.http.routers.colissend-secure.service=colissend"
       - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
     links:
       - claude_colissend_php-fpm

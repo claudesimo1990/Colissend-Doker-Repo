@@ -47,6 +47,8 @@ services:
         http_proxy: http://10.0.3.15:3128
         https_proxy: http://10.0.3.15:3128
     labels:
+      - "traefik.http.routers.colissend-secure.entrypoints=websecure"
+      - "traefik.http.routers.colissend-secure.service=colissend"
       - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
     links:
       - claude_colissend_php-fpm
