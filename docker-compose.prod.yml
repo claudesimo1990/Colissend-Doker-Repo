@@ -33,9 +33,6 @@ services:
     build:
       args:
         nginxconf: nginx_prod.conf
-    volumes:
-      - /etc/ssl/abus-bkp/chain.abus-kransysteme.de.crt:/etc/nginx/ssl/abus-kransysteme.de.crt
-      - /etc/ssl/abus-bkp/abus-kransysteme.de.key:/etc/nginx/ssl/abus-kransysteme.de.key
     labels:
       - "traefik.http.routers.colissend-secure.rule=Host(`colissend.com`)"
     links:
