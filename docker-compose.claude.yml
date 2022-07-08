@@ -6,6 +6,8 @@ services:
       file: common.yml
       service: claude_colissend_db
     restart: always
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: mariapwd
 
@@ -39,7 +41,7 @@ services:
         http_proxy: http://192.168.7.240:8080
         https_proxy: http://192.168.7.240:8080
     labels:
-      - "traefik.http.routers.colissend-secure.entrypoints=websecure"
+      #- "traefik.http.routers.colissend-secure.entrypoints=frontend"
       - "traefik.http.routers.colissend-secure.service=colissend"
       - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
     links:

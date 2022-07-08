@@ -42,7 +42,6 @@ services:
       - /srv/colissend/logs/nginx:/var/log/nginx
     networks:
       - portal-net
-      - proxy
       - traefik-net
 
   claude_colissend_redis:
