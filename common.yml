@@ -1,7 +1,5 @@
 version: '2.2'
 
-#New version
-
 services:
   claude_colissend_db:
     build: ./mariadb
@@ -43,6 +41,18 @@ services:
     networks:
       - portal-net
       - traefik-net
+
+  claude_colissend_npm:
+    build: ./node
+    container_name: claude_colissend_npm
+    hostname:  claude_colissend_npm
+    volumes:
+      - /srv/colissend/data/www:/var/www/html
+    networks:
+      - portal-net
+      - traefik-net
+      - database-net
+
 
   claude_colissend_redis:
     build: ./redis

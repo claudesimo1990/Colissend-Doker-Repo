@@ -45,6 +45,16 @@ services:
       service: claude_colissend_redis
     restart: always
 
+  claude_colissend_npm:
+    extends:
+      file: common.yml
+      service: claude_colissend_npm
+    ports:
+      - 4000:3000
+      - 4001:3001
+    working_dir: /var/www/html
+    entrypoint: [ 'npm' ]
+
 networks:
   portal-net:
     external: true
