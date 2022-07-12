@@ -41,7 +41,6 @@ services:
     networks:
       - portal-net
       - traefik-net
-      - proxy
 
   claude_colissend_npm:
     build: ./node
