@@ -11,6 +11,7 @@ services:
     networks:
       - portal-net
       - database-net
+      - proxy
 
   claude_colissend_php-fpm:
     build: ./php-fpm
@@ -24,6 +25,7 @@ services:
     user: root
     networks:
       - portal-net
+      - proxy
 
   claude_colissend_nginx:
     build: ./nginx
@@ -41,6 +43,7 @@ services:
     networks:
       - portal-net
       - traefik-net
+      - proxy
 
   claude_colissend_npm:
     build: ./node
@@ -51,6 +54,7 @@ services:
     networks:
       - portal-net
       - traefik-net
+      - proxy
       - database-net
 
 
@@ -62,4 +66,5 @@ services:
       - /srv/colissend/data/redis:/data
     networks:
       - portal-net
+      - proxy
       - database-net
