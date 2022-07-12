@@ -34,7 +34,6 @@ services:
       args:
         nginxconf: nginx_prod.conf
     labels:
-      - "traefik.http.routers.colissend-secure.service=colissend"
       - "traefik.http.routers.colissend-secure.rule=Host(`colissend.com`)"
     links:
       - claude_colissend_php-fpm

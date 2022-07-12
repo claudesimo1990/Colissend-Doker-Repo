@@ -43,6 +43,7 @@ services:
     labels:
       #- "traefik.http.routers.colissend-secure.entrypoints=frontend"
       - "traefik.http.routers.colissend-secure.service=colissend"
+      - "traefik.http.routers.colissend-secure.service=colissend"
       - "traefik.http.middlewares.colissend-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.colissend-secure.middlewares=colissend-headers"
       - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
