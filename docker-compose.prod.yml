@@ -6,6 +6,8 @@ services:
       file: common.yml
       service: claude_colissend_db
     restart: always
+    networks:
+      - proxy
     environment:
       MYSQL_DATABASE: colissend
       MYSQL_ROOT_PASSWORD: mariapwd
@@ -22,6 +24,8 @@ services:
         phpini: php_prod.ini
     links:
       - claude_colissend_db
+    networks:
+      - proxy
 
   claude_colissend_nginx:
     extends:
@@ -34,32 +38,22 @@ services:
       args:
         nginxconf: nginx_prod.conf
     labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
       - "traefik.http.routers.colissend.rule=Host(`colissend.com`)"
     links:
       - claude_colissend_php-fpm
+    networks:
+      - proxy
 
   claude_colissend_redis:
     extends:
       file: common.yml
       service: claude_colissend_redis
     restart: always
-
-  claude_colissend_npm:
-    extends:
-      file: common.yml
-      service: claude_colissend_npm
-    ports:
-      - 4000:3000
-      - 4001:3001
-    working_dir: /var/www/html
-    entrypoint: [ 'npm' ]
+    networks:
+      - proxy
 
 networks:
-  portal-net:
-    external: true
-  traefik-net:
-    external: true
   proxy:
-    external: true
-  database-net:
     external: true
