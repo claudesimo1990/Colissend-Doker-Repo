@@ -27,6 +27,26 @@ services:
     links:
       - claude_colissend_db
 
+  supervisor:
+    extends:
+      file: common.yml
+      service: supervisor
+    restart: unless-stopped
+    ports:
+      - 6001:6001
+    command: ["supervisord", "-c", "/etc/supervisord.conf"]
+    environment:
+      - APP_ROOT=/var/www/html
+      - QUEUE_DRIVER=databse
+      - OPTIONS="--queue=some_queue --sleep=3 --tries=3"
+      - NUM_PROCS=4
+    build:
+      args:
+        development: 1
+        http_proxy: http://192.168.7.240:8080
+        https_proxy: http://192.168.7.240:8080
+        phpini: php_dev_claude.ini
+
   claude_colissend_nginx:
     extends:
       file: common.yml
@@ -41,11 +61,6 @@ services:
         http_proxy: http://192.168.7.240:8080
         https_proxy: http://192.168.7.240:8080
     labels:
-      #- "traefik.http.routers.colissend-secure.entrypoints=frontend"
-      - "traefik.http.routers.colissend-secure.service=colissend"
-      - "traefik.http.routers.colissend-secure.service=colissend"
-      - "traefik.http.middlewares.colissend-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
-      - "traefik.http.routers.colissend-secure.middlewares=colissend-headers"
       - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
     links:
       - claude_colissend_php-fpm
@@ -55,16 +70,6 @@ services:
       file: common.yml
       service: claude_colissend_redis
     restart: always
-
-  claude_colissend_npm:
-    extends:
-      file: common.yml
-      service: claude_colissend_npm
-    ports:
-      - 3000:3000
-      - 3001:3001
-    working_dir: /var/www/html
-    entrypoint: [ 'npm' ]
 
 networks:
   portal-net:

@@ -58,15 +58,26 @@ RUN apt-get update \
         zip \
         soap \
         exif \
+        git \
 && apt-get autoremove -y \
     && apt-get remove -y autoconf automake libtool nasm make pkg-config libz-dev build-essential g++ \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/* ~/.composer \
 && echo "Fertig"
 
+# Install xdebug
+RUN if [ "$development" -eq "1" ]; then yes | pecl install xdebug-3.0.4 \
+    && mkdir /var/log/xdebug \
+    && touch /var/log/xdebug/remote.log \
+    && chmod 777 /var/log/xdebug/remote.log \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.max_nesting_level=1000" >> /usr/local/etc/php/conf.d/xdebug.ini; fi
+
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 RUN apt-get update && \
-apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev && \
+apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev cron && \
 docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
 docker-php-ext-install gd
 

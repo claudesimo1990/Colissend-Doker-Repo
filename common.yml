@@ -8,6 +8,9 @@ services:
     volumes:
       - /srv/colissend/data/mariadb:/var/lib/mysql
       - /srv/colissend/logs/mysql:/var/logs/mysql
+    networks:
+      - portal-net
+      - database-net
 
   claude_colissend_php-fpm:
     build: ./php-fpm
@@ -19,22 +22,37 @@ services:
       - /srv/colissend/logs/php-fpm:/var/log/php
       - /srv/colissend/logs/cron:/var/log/cron
     user: root
+    networks:
+      - portal-net
 
   claude_colissend_nginx:
     build: ./nginx
     container_name: claude_colissend_nginx
     hostname: claude_colissend_nginx
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.colissend-secure.entrypoints=frontendsecure"
+      - "traefik.http.routers.colissend-secure.service=colissend"
+      - "traefik.http.routers.colissend-secure.tls=true"
+      - "traefik.http.services.colissend.loadbalancer.server.port=80"
+      - "traefik.http.middlewares.colissend-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.colissend-secure.middlewares=colissend-headers"
     volumes:
       - /srv/colissend/data/www:/var/www/html
       - /srv/colissend/logs/nginx:/var/log/nginx
+    networks:
+      - portal-net
+      - traefik-net
 
-  claude_colissend_npm:
-    build: ./node
-    container_name: claude_colissend_npm
-    hostname:  claude_colissend_npm
+  supervisor:
+    build: ./supervisor
+    container_name: supervisor
+    hostname: supervisor
     volumes:
       - /srv/colissend/data/www:/var/www/html
-
+    networks:
+      - portal-net
+      - database-net
 
   claude_colissend_redis:
     build: ./redis
@@ -42,3 +60,6 @@ services:
     hostname:  claude_colissend_redis
     volumes:
       - /srv/colissend/data/redis:/data
+    networks:
+      - portal-net
+      - database-net

@@ -1,0 +1,1 @@
+*/1 * * * * /usr/local/bin/php -d memory_limit=-1 /var/www/html/artisan websockets:serve >> /var/log/cron/sockets.log 2>&1

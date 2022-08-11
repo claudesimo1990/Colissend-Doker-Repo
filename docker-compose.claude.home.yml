@@ -47,10 +47,6 @@ services:
         http_proxy: http://10.0.3.15:3128
         https_proxy: http://10.0.3.15:3128
     labels:
-    #  - "traefik.http.routers.colissend-secure.entrypoints=colissend"
-      - "traefik.http.routers.colissend-secure.service=colissend"
-      - "traefik.http.routers.colissend-secure.service=colissend"
-      - "traefik.http.middlewares.colissend-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.colissend-secure.rule=Host(`colis.development.claude`)"
     links:
       - claude_colissend_php-fpm
@@ -60,16 +56,6 @@ services:
       file: common.yml
       service: claude_colissend_redis
     restart: always
-
-  claude_colissend_npm:
-    extends:
-      file: common.yml
-      service: claude_colissend_npm
-    ports:
-      - 4000:3000
-      - 4001:3001
-    working_dir: /var/www/html
-    entrypoint: [ 'npm' ]
 
 networks:
   portal-net:
