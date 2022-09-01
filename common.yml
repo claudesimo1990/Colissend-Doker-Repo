@@ -10,7 +10,6 @@ services:
       - /srv/colissend/logs/mysql:/var/logs/mysql
     networks:
       - proxy
-      - database-net
 
   claude_colissend_php-fpm:
     build: ./php-fpm
@@ -52,7 +51,6 @@ services:
       - /srv/colissend/data/www:/var/www/html
     networks:
       - proxy
-      - database-net
 
   claude_colissend_redis:
     build: ./redis
@@ -62,4 +60,3 @@ services:
       - /srv/colissend/data/redis:/data
     networks:
       - proxy
-      - database-net
