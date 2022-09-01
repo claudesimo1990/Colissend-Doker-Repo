@@ -9,7 +9,7 @@ services:
       - /srv/colissend/data/mariadb:/var/lib/mysql
       - /srv/colissend/logs/mysql:/var/logs/mysql
     networks:
-      - portal-net
+      - proxy
       - database-net
 
   claude_colissend_php-fpm:
@@ -23,7 +23,7 @@ services:
       - /srv/colissend/logs/cron:/var/log/cron
     user: root
     networks:
-      - portal-net
+      - proxy
 
   claude_colissend_nginx:
     build: ./nginx
@@ -41,7 +41,7 @@ services:
       - /srv/colissend/data/www:/var/www/html
       - /srv/colissend/logs/nginx:/var/log/nginx
     networks:
-      - portal-net
+      - proxy
       - traefik-net
 
   supervisor:
@@ -51,7 +51,7 @@ services:
     volumes:
       - /srv/colissend/data/www:/var/www/html
     networks:
-      - portal-net
+      - proxy
       - database-net
 
   claude_colissend_redis:
@@ -61,5 +61,5 @@ services:
     volumes:
       - /srv/colissend/data/redis:/data
     networks:
-      - portal-net
+      - proxy
       - database-net
