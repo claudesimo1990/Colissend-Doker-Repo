@@ -65,14 +65,14 @@ RUN apt-get update \
 && echo "Fertig"
 
 # Install xdebug
-RUN if [ "$development" -eq "1" ]; then yes | pecl install xdebug-3.0.4 \
-    && mkdir /var/log/xdebug \
-    && touch /var/log/xdebug/remote.log \
-    && chmod 777 /var/log/xdebug/remote.log \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.max_nesting_level=1000" >> /usr/local/etc/php/conf.d/xdebug.ini; fi
+#RUN if [ "$development" -eq "1" ]; then yes | pecl install xdebug-3.0.4 \
+#    && mkdir /var/log/xdebug \
+#    && touch /var/log/xdebug/remote.log \
+#    && chmod 777 /var/log/xdebug/remote.log \
+#    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+#    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
+#    && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
+#    && echo "xdebug.max_nesting_level=1000" >> /usr/local/etc/php/conf.d/xdebug.ini; fi
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
@@ -80,6 +80,15 @@ RUN apt-get update && \
 apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev cron && \
 docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
 docker-php-ext-install gd
+
+RUN docker-php-ext-configure pcntl --enable-pcntl \
+  && docker-php-ext-install \
+    pcntl
+
+RUN mkdir -p /usr/src/php/ext/redis \
+    && curl -L https://github.com/phpredis/phpredis/archive/5.3.7.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
+    && echo 'redis' >> /usr/src/php-available-exts \
+    && docker-php-ext-install redis
 
 # PHP konfigurieren
 COPY config/$phpini /usr/local/etc/php/conf.d/abus.ini
