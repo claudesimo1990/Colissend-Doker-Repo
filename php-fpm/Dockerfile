@@ -91,7 +91,7 @@ RUN mkdir -p /usr/src/php/ext/redis \
     && docker-php-ext-install redis
 
 # PHP konfigurieren
-COPY config/$phpini /usr/local/etc/php/conf.d/abus.ini
+COPY config/$phpini /usr/local/etc/php/conf.d/colissend.ini
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | \
