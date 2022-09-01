@@ -41,7 +41,6 @@ services:
       - /srv/colissend/logs/nginx:/var/log/nginx
     networks:
       - proxy
-      - traefik-net
 
   supervisor:
     build: ./supervisor
